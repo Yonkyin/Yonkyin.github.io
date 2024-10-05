@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Yonkyin">
+
+
+
+
+
+<title>【Python】零 - 导学课 | Yonkyin</title>
+
+
+
+    <link rel="icon" href="/01.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Yonkyin&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/">Home</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Category</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Yonkyin&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/">Home</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Category</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">【Python】零 - 导学课</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Yonkyin</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 24, 2023&nbsp;&nbsp;09:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Notes/">Notes</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line">main()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;1&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这段代码使用 C 语言编写，包含一个名为 main 的函数，该函数通过调用 printf 函数输出数字 1。</p>
+<p>具体来说，printf 函数是一个标准库函数，用于在控制台或终端窗口中打印输出。在本例中，printf 函数的参数是字符串 “1”，它是要打印输出的文本。此外，该程序还包含一个 main 函数，它是 C 语言程序的入口点，也就是程序开始执行的地方。在本例中，该函数为空，即不包含任何语句或操作。</p>
+<br>
+
+<h1 id="〇、Python编程环境"><a href="#〇、Python编程环境" class="headerlink" title="〇、Python编程环境"></a>〇、Python编程环境</h1><h2 id="（一）常用命令"><a href="#（一）常用命令" class="headerlink" title="（一）常用命令"></a>（一）常用命令</h2><p>venv命令：创建虚拟环境</p>
+<p>jupyter常用快捷键：<code>shift + enter</code>  运行当前cell</p>
+<p>当你在VS Code中安装了Python插件时，以下是一些常用的Python插件相关的快捷键：</p>
+<ul>
+<li><code>Ctrl+Shift+P</code>：打开命令面板</li>
+<li><code>Ctrl+Shift+N</code>：新建文件</li>
+<li><code>Ctrl+Shift+X</code>：打开扩展面板</li>
+<li><code>Ctrl+Shift+P</code> -&gt; “Python: Create Terminal”：创建一个Python终端</li>
+<li><code>Ctrl+Shift+P</code> -&gt; “Python: Run Python File in Terminal”：在终端中运行当前文件</li>
+<li><code>Ctrl+Shift+P</code> -&gt; “Python: Select Interpreter”：选择Python解释器</li>
+<li><code>Ctrl+Shift+P</code> -&gt; “Python: Start REPL”：打开交互式Python shell</li>
+<li><code>F5</code>：在调试模式下启动程序</li>
+<li><code>F9</code>：在当前行设置调试断点</li>
+<li><code>Shift+F9</code>：在当前行移除调试断点</li>
+<li><code>Ctrl+K Ctrl+C</code>：注释所选行</li>
+<li><code>Ctrl+K Ctrl+U</code>：取消注释所选行</li>
+<li><code>Alt+Shift+F</code>：格式化当前文件</li>
+<li><code>Ctrl+Shift+I</code>：打开Python Interactive窗口</li>
+</ul>
+<h2 id="（二）用虚拟环境管理包"><a href="#（二）用虚拟环境管理包" class="headerlink" title="（二）用虚拟环境管理包"></a>（二）用虚拟环境管理包</h2><br>
+
+<h1 id="一、一起出发！"><a href="#一、一起出发！" class="headerlink" title="一、一起出发！"></a>一、一起出发！</h1><p>更多思考的空间。主动探索、思考。</p>
+<h2 id="（一）why？目的"><a href="#（一）why？目的" class="headerlink" title="（一）why？目的"></a>（一）why？目的</h2><p>找到目标，方法会随之而来。思考以外的思考，工作以外的工作</p>
+<ol>
+<li><p><strong>为什么学编程？</strong></p>
+<ol>
+<li>将是人人必备技能</li>
+<li>锻炼<strong>编程思维</strong><ol>
+<li><strong>拆解</strong>问题</li>
+<li><strong>量化</strong>思维</li>
+<li><strong>表达</strong>和<strong>描述</strong></li>
+</ol>
+</li>
+<li><strong>语言</strong>，人与机器、人与人沟通的语言</li>
+<li>难得的<strong>及时反馈（爽），纯粹的快乐</strong></li>
+</ol>
+</li>
+<li><p><strong>为什么选Python？</strong></p>
+<ol>
+<li>既可以高大上，也可以很基础<ul>
+<li>数据分析、深度学习、网站后台等“正统”应用；（下面的库很多是互相联系、based on的）</li>
+<li>pandas、SciPy、NumPy、Matplotlib、Keras、Tensor Flow、Orange 3、theano、Scikit-learn……《Automate te Boring Stuff with Python》……</li>
+</ul>
+</li>
+<li>最接近自然语言<ul>
+<li>关键字和使用更接近自然语言</li>
+<li>能看懂单词，哪怕不懂Python也能懂（可读性）</li>
+</ul>
+</li>
+<li>众多优秀的品质（可读性好、简洁、社区支持、不依赖平台、开放的库、灵活、可视化）简单易学</li>
+<li>流行（很重要）</li>
+<li>容易爱上</li>
+<li>缺点 <ul>
+<li>速度不快</li>
+<li>动态类型，安全性不高</li>
+<li>无法编译，部署和保护不方便</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="（二）what？执行"><a href="#（二）what？执行" class="headerlink" title="（二）what？执行"></a>（二）what？执行</h2><p>一起编程、一起成长</p>
+<p>快速扫盲，极速上手</p>
+<p>调试</p>
+<p>重构、版本控制等软技能</p>
+<p>学会更好的自学</p>
+<h2 id="（三）how？方法"><a href="#（三）how？方法" class="headerlink" title="（三）how？方法"></a>（三）how？方法</h2><ol>
+<li>学编程，最重要的是“编程“<ol>
+<li>入门前<strong>多敲代码</strong>，少拷贝（符号、全半角等）</li>
+<li><strong>多做小项目</strong>（解决小问题），<strong>化零为整</strong>需要熟练</li>
+<li>入门后<strong>多看代码</strong>，借鉴好的风格</li>
+</ol>
+</li>
+<li><strong>犯错</strong>是进步的最好机会</li>
+<li>学编程，重点不在编，在解决问题<ol>
+<li>找到问题 👉 分析问题 👉 分解问题 👉 描述问题 👉 编写代码</li>
+<li>编程思维</li>
+</ol>
+</li>
+<li>先实现，再完善<ol>
+<li>不要指望一步到位</li>
+<li>现在就动</li>
+</ol>
+</li>
+<li>看资料<ol>
+<li>官方文档（源头）</li>
+<li>Think Python</li>
+<li>Fluent Python</li>
+<li>不用刷书，”逛街心态“找启发</li>
+</ol>
+</li>
+</ol>
+<br>
+
+<h1 id="二、什么是编程"><a href="#二、什么是编程" class="headerlink" title="二、什么是编程"></a>二、什么是编程</h1><h2 id="（一）通过编写代码解决问题"><a href="#（一）通过编写代码解决问题" class="headerlink" title="（一）通过编写代码解决问题"></a>（一）通过编写代码解决问题</h2><p>写代码是手段，解决问题是目的。</p>
+<h2 id="（二）各种语言的区别"><a href="#（二）各种语言的区别" class="headerlink" title="（二）各种语言的区别"></a>（二）各种语言的区别</h2><p>语法、保留关键字、格式、运行方式各有不同。</p>
+<p><img src="https://i.328888.xyz/2023/04/24/iSEIuo.png" alt="iSEIuo.png"></p>
+<h2 id="（三）编程语言的特质：逻辑的、精确的、明确的"><a href="#（三）编程语言的特质：逻辑的、精确的、明确的" class="headerlink" title="（三）编程语言的特质：逻辑的、精确的、明确的"></a>（三）编程语言的特质：逻辑的、精确的、明确的</h2><h2 id="（四）基本块很重要，但表达内容更重要"><a href="#（四）基本块很重要，但表达内容更重要" class="headerlink" title="（四）基本块很重要，但表达内容更重要"></a>（四）基本块很重要，但表达内容更重要</h2><br>
+
+<h1 id="三、初见Python"><a href="#三、初见Python" class="headerlink" title="三、初见Python"></a>三、初见Python</h1><h2 id="（一）Python是解释型语言"><a href="#（一）Python是解释型语言" class="headerlink" title="（一）Python是解释型语言"></a>（一）Python是解释型语言</h2><p><img src="https://i.328888.xyz/2023/04/24/iSE8hA.png" alt="iSE8hA.png"></p>
+<ol>
+<li>编译型语言：</li>
+</ol>
+<p><img src="https://i.328888.xyz/2023/04/24/iSErHN.png" alt="iSErHN.png"></p>
+<pre><code>源文件经过编译器，编译、链接，生成可执行文件（机器码，对内存和计算资源进行调用）。
+</code></pre>
+<ol start="2">
+<li>解释型语言：</li>
+</ol>
+<p><img src="https://i.328888.xyz/2023/04/24/iSE3eV.png" alt="iSE3eV.png"></p>
+<pre><code>源文件，编译为中间代码（字节码），逐行解释的过程。
+</code></pre>
+<h2 id="（二）Anaconda"><a href="#（二）Anaconda" class="headerlink" title="（二）Anaconda"></a>（二）Anaconda</h2><p><img src="https://i.328888.xyz/2023/04/24/iSERTd.png" alt="iSERTd.png"></p>
+<p>包管理器。</p>
+<p>主要组件：</p>
+<ul>
+<li>Anaconda Powershell Prompt（支持shell常用命令的增强命令行）</li>
+<li>Jupyter Notebook</li>
+<li></li>
+</ul>
+<h2 id="（三）简单入门"><a href="#（三）简单入门" class="headerlink" title="（三）简单入门"></a>（三）简单入门</h2>
+        </div>
+
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Knowledge/"># Knowledge</a>
+                    
+                        <a href="/tags/Python/"># Python</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2023/04/24/20230424-1/">【Python】一、编程基础</a>
+            
+            
+            <a class="next" rel="next" href="/2023/04/21/20230423-%E5%AE%89%E8%A3%85%E7%BB%8F%E9%AA%8C/">简单记录重新折腾的经历</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Yonkyin | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

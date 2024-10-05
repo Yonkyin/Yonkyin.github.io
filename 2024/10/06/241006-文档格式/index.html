@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Yonkyin">
+
+
+
+
+
+<title>文章开头代码块 | Yonkyin</title>
+
+
+
+    <link rel="icon" href="/01.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Yonkyin&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/">Home</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Category</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Yonkyin&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/">Home</a>
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Category</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">文章开头代码块</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Yonkyin</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">October 6, 2024&nbsp;&nbsp;02:09</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Hexo-Doc/">Hexo-Doc</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Front-matter 是文件开头的 YAML 或 JSON 代码块，用于配置写作设置。 以 YAML 格式书写时，Front-matter 以三个破折号 <code>---</code> 结束；以 JSON 格式书写时，Front-matter 以三个分号 <code>;;;</code> 结束。</p>
+<p><strong>YAML</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">---</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">Hello</span> <span class="string">World</span></span><br><span class="line"><span class="attr">date:</span> <span class="number">2013</span><span class="string">/7/13</span> <span class="number">20</span><span class="string">:46:25</span></span><br><span class="line"><span class="meta">---</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>JSON</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;title&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Hello World&quot;</span><span class="punctuation">,</span></span><br><span class="line"><span class="attr">&quot;date&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2013/7/13 20:46:25&quot;</span></span><br><span class="line">;;;</span><br></pre></td></tr></table></figure>
+
+<h1 id="设置-默认值"><a href="#设置-默认值" class="headerlink" title="设置 &amp; 默认值"></a>设置 &amp; 默认值</h1><table>
+<thead>
+<tr>
+<th align="left">设置</th>
+<th align="left">描述</th>
+<th align="left">默认值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>layout</code></td>
+<td align="left">布局</td>
+<td align="left"><code>config.default_layout</code></td>
+</tr>
+<tr>
+<td align="left"><code>title</code></td>
+<td align="left">标题</td>
+<td align="left">文章的文件名</td>
+</tr>
+<tr>
+<td align="left"><code>date</code></td>
+<td align="left">建立日期</td>
+<td align="left">文件建立日期</td>
+</tr>
+<tr>
+<td align="left"><code>updated</code></td>
+<td align="left">更新日期</td>
+<td align="left">文件更新日期</td>
+</tr>
+<tr>
+<td align="left"><code>comments</code></td>
+<td align="left">开启文章的评论功能</td>
+<td align="left"><code>true</code></td>
+</tr>
+<tr>
+<td align="left"><code>tags</code></td>
+<td align="left">标签（不适用于分页）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>categories</code></td>
+<td align="left">分类（不适用于分页）</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>permalink</code></td>
+<td align="left">覆盖文章的永久链接. 永久链接应该以 <code>/</code> 或 <code>.html 结尾</code></td>
+<td align="left"><code>null</code></td>
+</tr>
+<tr>
+<td align="left"><code>excerpt</code></td>
+<td align="left">纯文本的页面摘要。 使用 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/tag-plugins#%E6%96%87%E7%AB%A0%E6%91%98%E8%A6%81%E5%92%8C%E6%88%AA%E6%96%AD">该插件</a> 来格式化文本</td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left"><code>disableNunjucks</code></td>
+<td align="left">启用时禁用 Nunjucks 标签 <code>&#123;&#123; &#125;&#125;</code> &#x2F; <code>&#123;% %&#125;</code> 和 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/tag-plugins">标签插件</a> 的渲染功能</td>
+<td align="left">false</td>
+</tr>
+<tr>
+<td align="left"><code>lang</code></td>
+<td align="left">设置语言以覆盖 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/internationalization#%E8%B7%AF%E5%BE%84">自动检测</a></td>
+<td align="left">继承自 <code>_config.yml</code></td>
+</tr>
+<tr>
+<td align="left"><code>published</code></td>
+<td align="left">文章是否发布</td>
+<td align="left">对于 <code>_posts</code> 下的文章为 <code>true</code>，对于 <code>_draft</code> 下的文章为 <code>false</code></td>
+</tr>
+</tbody></table>
+<h1 id="布局"><a href="#布局" class="headerlink" title="布局"></a>布局</h1><p>根据 <code>_config.yml</code> 中 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/configuration#%E6%96%87%E7%AB%A0">default_layout</a> 的设置，默认布局是 <code>post</code> 。 当文章中的布局被禁用（<code>layout: false</code>），它将不会使用主题处理。 </p>
+<p>然而，它仍然会被任何可用的渲染引擎渲染：如果一篇文章是用 Markdown 写的，并且安装了 Markdown 渲染引擎（比如默认的 hexo-renderer-marked），它将被渲染成 HTML 。</p>
+<p>除非通过 <code>disableNunjucks</code> 设置或 <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/api/renderer#%E7%A6%81%E7%94%A8-Nunjucks-%E6%A0%87%E7%AD%BE">渲染引擎</a> 禁用，否则无论布局如何，<a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/tag-plugins">标签插件</a> 总是被处理。</p>
+<h1 id="分类和标签"><a href="#分类和标签" class="headerlink" title="分类和标签"></a>分类和标签</h1><p>“Categories” 和 “tags” 在内容管理、博客、网站或任何涉及组织和分类信息的场景中都是常见的概念。它们用于帮助用户更容易地找到和导航他们感兴趣的内容。</p>
+<p><strong>Categories（分类）</strong>:</p>
+<ul>
+<li>定义：<ul>
+<li>分类是将内容组织成更广泛、更一般的主题或领域的方式。</li>
+<li>它们通常用于将内容划分为几个主要的部分或区域。</li>
+</ul>
+</li>
+<li>特点：<ul>
+<li>分类通常是层次结构的，可以有子分类。</li>
+<li>每个内容项通常只能属于一个分类（尽管有些系统允许内容属于多个分类）。</li>
+<li>分类有助于用户了解网站或内容库的主要结构和主题。</li>
+</ul>
+</li>
+<li>使用场景：<ul>
+<li>在博客中，分类可能用于区分不同类型的文章，如“技术”、“生活”、“健康”等。</li>
+<li>在电子商务网站中，分类可能用于组织产品，如“电子产品”、“服装”、“家居”等。</li>
+</ul>
+</li>
+</ul>
+<p><strong>Tags（标签）</strong>:</p>
+<ul>
+<li>定义：<ul>
+<li>标签是用于描述内容特定方面或特点的关键词或短语。</li>
+<li>它们提供了一种更灵活、更细粒度的方式来组织和查找内容。</li>
+</ul>
+</li>
+<li>特点：<ul>
+<li>标签通常不是层次结构的，它们是扁平的。</li>
+<li>一个内容项可以有多个标签。</li>
+<li>标签有助于用户发现与特定主题或兴趣相关的内容。</li>
+</ul>
+</li>
+<li>使用场景：<ul>
+<li>在博客中，标签可能用于标记文章的特定主题、技术、事件或地点，如“JavaScript”、“旅行”、“摄影”等。</li>
+<li>在社交媒体中，标签用于标记帖子或推文的主题，以便其他用户可以发现和参与讨论。</li>
+<li>在电子商务网站中，标签可能用于描述产品的特征，如“有机”、“素食”、“打折”等。</li>
+</ul>
+</li>
+</ul>
+<p><strong>区别与联系</strong></p>
+<ul>
+<li>区别：分类通常更广泛、更一般，而标签更具体、更详细。分类是组织内容的主要方式，而标签是补充和增强分类的一种方式。</li>
+<li>联系：分类和标签都可以用于帮助用户导航和查找内容。它们可以共同工作，以提供更丰富、更全面的内容组织方式。</li>
+</ul>
+<p><strong>示例</strong></p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">categories:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">Sports</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">Baseball</span></span><br><span class="line"><span class="attr">tags:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">Injury</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">Fight</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">Shocking</span></span><br></pre></td></tr></table></figure>
+
+<p>如果要应用多个类别层次结构，请使用名称列表，而不是单个名称。如果 Hexo 在帖子上看到任何以这种方式定义的分类，它会将该帖子的每个分类视为自己独立的层次结构。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">categories:</span></span><br><span class="line">  <span class="bullet">-</span> [<span class="string">Sports</span>, <span class="string">Baseball</span>]</span><br><span class="line">  <span class="bullet">-</span> [<span class="string">MLB</span>, <span class="string">American</span> <span class="string">League</span>, <span class="string">Boston</span> <span class="string">Red</span> <span class="string">Sox</span>]</span><br><span class="line">  <span class="bullet">-</span> [<span class="string">MLB</span>, <span class="string">American</span> <span class="string">League</span>, <span class="string">New</span> <span class="string">York</span> <span class="string">Yankees</span>]</span><br><span class="line">  <span class="bullet">-</span> <span class="string">Rivalries</span></span><br></pre></td></tr></table></figure>
+
+<br>
+
+<p><a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/front-matter">原文链接</a></p>
+
+        </div>
+
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Experience/"># Experience</a>
+                    
+                        <a href="/tags/Computer/"># Computer</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2024/10/06/241006-%E5%91%BD%E4%BB%A4/">Hexo 指令</a>
+            
+            
+            <a class="next" rel="next" href="/2024/10/05/hello-world/">Hello World</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Yonkyin | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

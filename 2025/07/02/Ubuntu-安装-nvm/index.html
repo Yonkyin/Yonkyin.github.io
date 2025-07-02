@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Yonkyin">
+
+
+
+
+
+<title>Ubuntu 安装 nvm | Yonkyin的个人博客</title>
+
+
+
+    <link rel="icon" href="/01.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Yonkyin&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/">Home</a>
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/categories">Categories</a>
+                
+                <a class="menu-item" href="/tags">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Yonkyin&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/">Home</a>
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/categories">Categories</a>
+                
+                <a class="menu-item" href="/tags">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Ubuntu 安装 nvm</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Yonkyin</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 2, 2025&nbsp;&nbsp;14:26:43</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/Techniques/">Techniques</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>在 Ubuntu 上安装 nvm（Node Version Manager）最推荐的方法是使用 官方安装脚本。下面是完整步骤：</p>
+<h1 id="方法一：使用官方安装脚本（推荐）"><a href="#方法一：使用官方安装脚本（推荐）" class="headerlink" title="方法一：使用官方安装脚本（推荐）"></a>方法一：使用官方安装脚本（推荐）</h1><h2 id="步骤-1：运行安装命令"><a href="#步骤-1：运行安装命令" class="headerlink" title="步骤 1：运行安装命令"></a>步骤 1：运行安装命令</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash</span><br></pre></td></tr></table></figure>
+
+<p>或者如果你没有 curl，可以用 wget：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash</span><br></pre></td></tr></table></figure>
+
+<p>上述命令将下载并运行安装脚本，把 nvm 安装到 <code>~/.nvm</code> 目录中，并自动修改你的 <code>~/.bashrc</code> 或 <code>~/.zshrc</code>。</p>
+<h2 id="步骤-2：让终端加载-nvm（重启终端或手动加载）"><a href="#步骤-2：让终端加载-nvm（重启终端或手动加载）" class="headerlink" title="步骤 2：让终端加载 nvm（重启终端或手动加载）"></a>步骤 2：让终端加载 nvm（重启终端或手动加载）</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"><span class="comment"># 或者是 zsh 用户</span></span><br><span class="line"><span class="built_in">source</span> ~/.zshrc</span><br></pre></td></tr></table></figure>
+
+<h2 id="步骤-3：验证是否安装成功"><a href="#步骤-3：验证是否安装成功" class="headerlink" title="步骤 3：验证是否安装成功"></a>步骤 3：验证是否安装成功</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm --version</span><br></pre></td></tr></table></figure>
+
+<p>如果返回版本号，如 0.39.7，说明安装成功！</p>
+<h1 id="方法二：你无法访问-GitHub？使用离线安装"><a href="#方法二：你无法访问-GitHub？使用离线安装" class="headerlink" title="方法二：你无法访问 GitHub？使用离线安装"></a>方法二：你无法访问 GitHub？使用离线安装</h1><p>如果你无法使用上述命令（如 GitHub 被墙），可以：</p>
+<ol>
+<li>在浏览器中访问并下载：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/nvm-sh/nvm/archive/refs/tags/v0.39.7.zip</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li><p>解压到本地，比如 <code>~/.nvm</code></p>
+</li>
+<li><p>手动配置环境变量：</p>
+</li>
+</ol>
+<p>在 <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 中添加：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> NVM_DIR=<span class="string">&quot;<span class="variable">$HOME</span>/.nvm&quot;</span></span><br><span class="line">[ -s <span class="string">&quot;<span class="variable">$NVM_DIR</span>/nvm.sh&quot;</span> ] &amp;&amp; \. <span class="string">&quot;<span class="variable">$NVM_DIR</span>/nvm.sh&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<h1 id="安装-Node-js-示例"><a href="#安装-Node-js-示例" class="headerlink" title="安装 Node.js 示例"></a>安装 Node.js 示例</h1><p>安装最新 LTS 版本的 Node.js：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm install --lts</span><br></pre></td></tr></table></figure>
+
+<p>设置默认版本：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm <span class="built_in">alias</span> default node</span><br></pre></td></tr></table></figure>
+
+<p>在无法访问 GitHub 的环境下，你可以通过 手动下载 + 本地解压 + 环境变量配置 实现 nvm 的离线安装，步骤如下：</p>
+<h1 id="步骤-1：下载-nvm-源码压缩包"><a href="#步骤-1：下载-nvm-源码压缩包" class="headerlink" title="步骤 1：下载 nvm 源码压缩包"></a>步骤 1：下载 nvm 源码压缩包</h1><p>使用可以联网的电脑或浏览器，访问：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https://github.com/nvm-sh/nvm/archive/refs/tags/v0.39.7.zip</span><br></pre></td></tr></table></figure>
+
+<p>下载后，将压缩包拷贝到 Ubuntu 系统（可用 U盘、WSL 文件共享、scp 等方式）。</p>
+<h1 id="步骤-2：解压到合适位置（建议放-nvm）"><a href="#步骤-2：解压到合适位置（建议放-nvm）" class="headerlink" title="步骤 2：解压到合适位置（建议放 ~&#x2F;.nvm）"></a>步骤 2：解压到合适位置（建议放 ~&#x2F;.nvm）</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unzip v0.39.7.zip</span><br><span class="line"><span class="built_in">mv</span> nvm-0.39.7 ~/.nvm</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>把 nvm-0.39.7 目录里的内容（也就是源码根目录里的文件）放进 ~&#x2F;.nvm，而不是保留 nvm-0.39.7 这一层目录</p>
+</blockquote>
+<p><strong>正确做法</strong>：</p>
+<p>进入并拷贝内容（推荐）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.nvm</span><br><span class="line"><span class="built_in">cd</span> nvm-0.39.7</span><br><span class="line"><span class="built_in">cp</span> -r . ~/.nvm</span><br></pre></td></tr></table></figure>
+
+<p>这样 <code>~/.nvm</code> 里直接是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">python-repl</span><br><span class="line">nvm.sh</span><br><span class="line">nvm-exec</span><br><span class="line">README.md</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>这才是 nvm 的预期结构，脚本才能运行。</p>
+<h1 id="步骤-3：配置环境变量"><a href="#步骤-3：配置环境变量" class="headerlink" title="步骤 3：配置环境变量"></a>步骤 3：配置环境变量</h1><p>在 <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 文件末尾添加以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> NVM_DIR=<span class="string">&quot;<span class="variable">$HOME</span>/.nvm&quot;</span></span><br><span class="line">[ -s <span class="string">&quot;<span class="variable">$NVM_DIR</span>/nvm.sh&quot;</span> ] &amp;&amp; \. <span class="string">&quot;<span class="variable">$NVM_DIR</span>/nvm.sh&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后执行：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br><span class="line"><span class="comment"># 或者是 .zshrc</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="步骤-4：验证是否安装成功"><a href="#步骤-4：验证是否安装成功" class="headerlink" title="步骤 4：验证是否安装成功"></a>步骤 4：验证是否安装成功</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvm --version</span><br></pre></td></tr></table></figure>
+
+<p>若输出 0.39.7 表示安装成功。</p>
+<h1 id="步骤-5：离线安装-Node-js（可选）"><a href="#步骤-5：离线安装-Node-js（可选）" class="headerlink" title="步骤 5：离线安装 Node.js（可选）"></a>步骤 5：离线安装 Node.js（可选）</h1><p>如果你也无法在线安装 Node.js，可以：</p>
+<ol>
+<li><p>从 <a target="_blank" rel="noopener" href="https://nodejs.org/en/download">Node.js</a> 官网 下载 .tar.xz 格式的 Node.js LTS 版本（Linux Binaries）。</p>
+</li>
+<li><p>将它放入如下目录（这是 nvm 规范路径）：</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> -p ~/.nvm/versions/node</span><br><span class="line">tar -xf node-v18.20.2-linux-x64.tar.xz -C ~/.nvm/versions/node</span><br><span class="line"><span class="built_in">mv</span> ~/.nvm/versions/node/node-v18.20.2-linux-x64 ~/.nvm/versions/node/v18.20.2</span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>使用 nvm 手动切换：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nvm use v18.20.2</span><br><span class="line">nvm <span class="built_in">alias</span> default v18.20.2</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Yonkyin</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://yonkyin.github.io/2025/07/02/Ubuntu-%E5%AE%89%E8%A3%85-nvm/">https://yonkyin.github.io/2025/07/02/Ubuntu-%E5%AE%89%E8%A3%85-nvm/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Experience/"># Experience</a>
+                    
+                        <a href="/tags/Computer/"># Computer</a>
+                    
+                        <a href="/tags/nvm-nodejs/"># nvm & nodejs</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2025/07/02/%E7%AE%80%E5%8D%95%E8%AE%B0%E5%BD%95Hexo%E9%87%8D%E8%A3%85%E7%9A%84%E7%BB%8F%E5%8E%86/">简单记录Hexo重装的经历</a>
+            
+            
+            <a class="next" rel="next" href="/2025/07/02/git-commit-%E8%A7%84%E8%8C%83/">git commit 规范</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Yonkyin | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

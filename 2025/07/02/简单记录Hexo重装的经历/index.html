@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Yonkyin">
+
+
+
+
+
+<title>简单记录Hexo重装的经历 | Yonkyin的个人博客</title>
+
+
+
+    <link rel="icon" href="/01.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const pagebody = document.getElementsByTagName('body')[0]
+
+            function setTheme(status) {
+
+                if (status === 'dark') {
+                    window.sessionStorage.theme = 'dark'
+                    pagebody.classList.add('dark-theme');
+
+                } else if (status === 'light') {
+                    window.sessionStorage.theme = 'light'
+                    pagebody.classList.remove('dark-theme');
+                }
+            };
+
+            setTheme(window.sessionStorage.theme)
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Yonkyin&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                <a class="menu-item" href="/">Home</a>
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/categories">Categories</a>
+                
+                <a class="menu-item" href="/tags">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Yonkyin&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">
+                    <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M4.5 17.27q-.213 0-.356-.145T4 16.768t.144-.356t.356-.143h15q.213 0 .356.144q.144.144.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.144T4 11.999t.144-.356t.356-.143h15q.213 0 .356.144t.144.357t-.144.356t-.356.143zm0-4.77q-.213 0-.356-.143Q4 7.443 4 7.23t.144-.356t.356-.143h15q.213 0 .356.144T20 7.23t-.144.356t-.356.144z"/></svg>
+                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Material Symbols Light by Google - https://github.com/google/material-design-icons/blob/master/LICENSE --><path fill="currentColor" d="m12 12.708l-5.246 5.246q-.14.14-.344.15t-.364-.15t-.16-.354t.16-.354L11.292 12L6.046 6.754q-.14-.14-.15-.344t.15-.364t.354-.16t.354.16L12 11.292l5.246-5.246q.14-.14.345-.15q.203-.01.363.15t.16.354t-.16.354L12.708 12l5.246 5.246q.14.14.15.345q.01.203-.15.363t-.354.16t-.354-.16z"/></svg>
+                </div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                <a class="menu-item" href="/">Home</a>
+                
+                <a class="menu-item" href="/archives">Posts</a>
+                
+                <a class="menu-item" href="/categories">Categories</a>
+                
+                <a class="menu-item" href="/tags">Tags</a>
+                
+                <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if (toggleMenu.classList.contains("active")) {
+            toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        } else {
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">简单记录Hexo重装的经历</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Yonkyin</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">July 2, 2025&nbsp;&nbsp;14:30:35</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>无聊了，想试着重新开始写写博客。</p>
+<p>这次还是打算选用 <strong>Hexo</strong> + <strong>Github Page</strong> 来部署，不用弄云服务器，希望后期积累多了后它不会变卡。</p>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><hr>
+<ol>
+<li>安装 git；</li>
+<li><a href="Ubuntu-%E5%AE%89%E8%A3%85-nvm.md">安装 nvm</a>；</li>
+<li><a href="Ubuntu-%E5%AE%89%E8%A3%85-nvm.md">安装 Node.js</a>；</li>
+<li>安装 Hexo；</li>
+<li>创建 Github 仓库。</li>
+</ol>
+<hr>
+<p>安装环境的步骤比较简单，git 和 Node.js 都可以直接官网下载安装包，简单记录一下其中的步骤。</p>
+<ol>
+<li>连接 Github：</li>
+</ol>
+<p>右键 -&gt; Git Bash Here，设置用户名和邮箱：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name &quot;&lt;GitHub 用户名&gt;&quot;</span><br><span class="line">git config --global user.email &quot;&lt;GitHub 邮箱&gt;&quot;</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建 SSH 密匙：</li>
+</ol>
+<p>输入 <code>ssh-keygen -t rsa -C &quot;GitHub 邮箱&quot;</code> ，然后一路回车。其中，<code>-t rsa</code> 是生成密钥的 key type，<code>-C</code> 是添加注释，<code>&quot;GitHub 邮箱&quot;</code> 是注释内容。</p>
+<blockquote>
+<p>不同类型的 SSH 公钥（Key types）在算法、安全性、兼容性和性能上有所区别。常见的类型有：</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th align="center">名称</th>
+<th align="center">算法类型</th>
+<th align="center">特点</th>
+<th align="center">使用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"><strong>RSA</strong> <br> Rivest–Shamir–Adleman</td>
+<td align="center">基于整数因式分解的公钥算法</td>
+<td align="center">兼容性最好，支持广泛<br>密钥长度通常为 2048 或 4096 位（位数越大安全性越高，但计算越慢）<br>安全性：目前仍然安全，但需要较长密钥才能保证安全。</td>
+<td align="center">通用，老旧系统必备。</td>
+</tr>
+<tr>
+<td align="center"><strong>DSA</strong> <br> Digital Signature Algorithm</td>
+<td align="center">基于离散对数问题</td>
+<td align="center">固定密钥长度 1024 位，安全性较低 <br> 现在被认为不够安全，很多系统禁用</td>
+<td align="center">不推荐使用</td>
+</tr>
+<tr>
+<td align="center"><strong>ECDSA</strong> <br> Elliptic Curve Digital Signature Algorithm</td>
+<td align="center">椭圆曲线算法，基于椭圆曲线离散对数问题</td>
+<td align="center">密钥较短（256、384、521 位），安全性高 <br> 运算速度快，性能优于 RSA <br> 兼容性：支持较新，部分老旧系统不支持</td>
+<td align="center">现代系统推荐</td>
+</tr>
+<tr>
+<td align="center"><strong>Ed25519</strong></td>
+<td align="center">基于 Edwards 曲线的椭圆曲线算法</td>
+<td align="center">密钥更短（256 位），非常安全 <br> 速度快，抗侧信道攻击能力强 <br> 简洁的实现和良好的安全属性 <br> 兼容性：需要 OpenSSH 6.5+ 支持</td>
+<td align="center">推荐用于新建 SSH 密钥</td>
+</tr>
+<tr>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+<p>ECDSA vs Ed25519 ：</p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>ECDSA</th>
+<th>Ed25519</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>密钥长度</td>
+<td>256&#x2F;384&#x2F;521 位</td>
+<td>256 位</td>
+</tr>
+<tr>
+<td>安全性</td>
+<td>高</td>
+<td>更高</td>
+</tr>
+<tr>
+<td>速度</td>
+<td>快</td>
+<td>更快</td>
+</tr>
+<tr>
+<td>抗攻击性</td>
+<td>较好</td>
+<td>优秀</td>
+</tr>
+<tr>
+<td>兼容性</td>
+<td>较广</td>
+<td>新</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>添加密匙：</li>
+</ol>
+<p>进入 <code>C:\Users\用户名\.ssh</code> 目录（要勾选显示“隐藏的项目”），用记事本打开公钥 <code>id_rsa.pub</code> 文件并复制里面的内容。</p>
+<p>登陆 GitHub ，进入 <strong>Settings</strong> 页面，选择左边栏的 <strong>SSH and GPG keys</strong>，点击 <strong>New SSH key</strong>。</p>
+<p>Title 随便取个名字，粘贴复制的 <code>id_rsa.pub</code> 内容到 <strong>Key</strong> 中，点击 <strong>Add SSH key</strong> 完成添加。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-9125065afd24332d7cd84feb6a350730_720w.webp" alt="eg"></p>
+<ol start="4">
+<li>验证连接：</li>
+</ol>
+<p>打开 Git Bash，输入 ssh -T <a href="mailto:&#103;&#x69;&#x74;&#64;&#103;&#105;&#116;&#104;&#117;&#x62;&#46;&#x63;&#111;&#109;">git@github.com</a> 出现 “Are you sure……”，输入 yes 回车确认。</p>
+<p>显示 “Hi xxx! You’ve successfully……” 即连接成功。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-b4c7524a2451f4ab42f9c22ea3c7b6be_720w.webp" alt="02"></p>
+<h1 id="Hexo-安装和部署"><a href="#Hexo-安装和部署" class="headerlink" title="Hexo 安装和部署"></a>Hexo 安装和部署</h1><ol>
+<li>安装 Hexo ：</li>
+</ol>
+<p>新建一个文件夹用来存放 Hexo 的程序文件，打开该文件夹，右键 <strong>终端</strong> 或 <strong>Git Bash Here</strong>。（Windows端）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>使用该命令前，应先安装好 node.js</p>
+</blockquote>
+<p>在该文件夹或新建文件夹下初始化：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo init</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注意，该文件夹必须为空文件夹。</p>
+</blockquote>
+<ol start="2">
+<li>一键部署：</li>
+</ol>
+<p>安装 hexo-deployer-git ：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git</span><br></pre></td></tr></table></figure>
+
+<p>修改 _config.yml 文件末尾的 Deployment 部分，修改成如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">    <span class="built_in">type</span>: git</span><br><span class="line">    repository: git@github.com:&lt;用户名&gt;/&lt;用户名&gt;.github.io.git</span><br><span class="line">    branch: master</span><br></pre></td></tr></table></figure>
+
+<p>但我之前部署的 branch 是 <code>main</code> ，所以在部署时改成了 main。</p>
+<p>完成后运行 <code>hexo d</code> 将网站上传部署到 GitHub Pages。</p>
+<p>这时访问 GitHub 域名 <code>https://&lt;用户名&gt;.github.io</code> 就可以看到 Hexo 网站了。</p>
+<ol start="3">
+<li>设置域名跳转：</li>
+</ol>
+<p>先通过阿里云等，设置 DNS 解析，将自己注册的域名解析到 <code>&lt;用户名&gt;.github.io</code> ，然后登陆 Github 设置自定义域名。</p>
+<p>登录 Github ，进入博客的 <strong>repo</strong> →  <strong>Settings</strong> → <strong>Pages</strong> → <strong>Custom domain</strong> ，然后点 Save 保存。</p>
+<p>完成！</p>
+<h1 id="一些踩到的小坑"><a href="#一些踩到的小坑" class="headerlink" title="一些踩到的小坑"></a>一些踩到的小坑</h1><p>首先，要记得添加 Tags 页面和 Categories 页面，不然会 404。</p>
+<p><strong>添加页面：</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo new page <span class="string">&quot;tags&quot;</span></span><br><span class="line">hexo new page <span class="string">&quot;categories&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>编辑 markdown 文件：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---</span><br><span class="line">title: &quot;tags&quot;</span><br><span class="line">type: tags</span><br><span class="line">layout: &quot;tags&quot;</span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意！！！</p>
+<p>这里面最重要的就是 <code>layout</code> 选项，后面的参数对应的是你 主题文件夹下 <code>layout</code> 文件夹下第一级的布局文件。</p>
+<p>比如，我的主题是用ejs写的，那么对应的就是layout&#x2F;tags.ejs，如果没有，那么就会出现空白的现象！<br>如果你的tags文件的命名时a.ejs，那么你就应该写成 layout: “a”。</p>
+</blockquote>
+<p><strong>编辑主题配置文件:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nav:</span><br><span class="line">    home: / # 看具体名字是叫什么。</span><br><span class="line">    about: /about</span><br><span class="line">    tags: /tags</span><br></pre></td></tr></table></figure>
+
+<p><strong>编辑 Hexo 配置文件 Directory 选项：</strong></p>
+<p>检查一下名称是否对应：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Directory</span><br><span class="line">tag_dir: tags</span><br></pre></td></tr></table></figure>
+
+<p><strong>编辑 <code>hexo new &quot;article&quot;</code> 后，markdown 里自动添加的 scaffolds</strong></p>
+<p>在博客文件夹里的 <code>scaffolds</code> 文件夹里，编辑 <code>post.md</code> 文档，添加入想包含的如“tags”等部分即可。</p>
+<hr>
+<p>好了，先这样吧。这是不记得第几次重启计划写博客了，希望这次真能慢慢有所积累，有所坚持！</p>
+<p>(ง๑ •̀_•́)ง ~~</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Yonkyin</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://yonkyin.github.io/2025/07/02/%E7%AE%80%E5%8D%95%E8%AE%B0%E5%BD%95Hexo%E9%87%8D%E8%A3%85%E7%9A%84%E7%BB%8F%E5%8E%86/">https://yonkyin.github.io/2025/07/02/%E7%AE%80%E5%8D%95%E8%AE%B0%E5%BD%95Hexo%E9%87%8D%E8%A3%85%E7%9A%84%E7%BB%8F%E5%8E%86/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2025/07/02/Ubuntu-%E5%AE%89%E8%A3%85-nvm/">Ubuntu 安装 nvm</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Yonkyin | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
